@@ -11,7 +11,7 @@ La BD MySQL 8.0 en Docker se reutiliza sin cambios de schema.
 |------|-------------|--------|-------|
 | Fase 1 | Base del proyecto + Autenticacion JWT | COMPLETADA | 2026-06-12 |
 | Fase 2 | Modulo Productos | COMPLETADA | 2026-06-15 |
-| Fase 3 | Modulo Clientes | Pendiente | — |
+| Fase 3 | Modulo Clientes | COMPLETADA | 2026-06-15 |
 | Fase 4 | Modulo Vender (POS) | Pendiente | — |
 | Fase 5 | Modulo Pedidos | Pendiente | — |
 | Fase 6 | Usuarios + Reportes + Dashboard final | Pendiente | — |

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROSS MILLE - Clientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .topbar {
+            background-color: #1a1a2e;
+            color: #fff;
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .topbar .brand {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+        }
+        .topbar .section-name {
+            font-size: 0.85rem;
+            opacity: 0.65;
+            margin-left: 12px;
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+        }
+        .btn-top {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.35);
+            color: #fff;
+            border-radius: 6px;
+            padding: 5px 14px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-top:hover { background: rgba(255,255,255,0.12); }
+
+        .main {
+            padding: 28px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .search-wrap {
+            display: flex;
+            gap: 6px;
+            flex: 1;
+            min-width: 220px;
+        }
+        .search-input {
+            flex: 1;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: #1a1a2e; }
+        .btn-buscar {
+            background: #1a1a2e;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+        .btn-buscar:hover { background: #2d2d4e; }
+        .btn-limpiar {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+        .btn-limpiar:hover { background: #5a6268; }
+        .btn-nuevo {
+            background: #198754;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .btn-nuevo:hover { background: #157347; }
+
+        .table-wrap {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        thead th {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 12px 14px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.1s;
+        }
+        tbody tr:hover { background: #f8f8fc; }
+        tbody td {
+            padding: 11px 14px;
+            color: #333;
+            vertical-align: middle;
+        }
+        .td-id { font-weight: 600; color: #1a1a2e; font-size: 0.82rem; }
+        .td-nombre { font-weight: 600; }
+        .td-muted { color: #888; font-size: 0.83rem; }
+        .acciones { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn-accion {
+            border: none;
+            border-radius: 5px;
+            padding: 4px 12px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.15s;
+        }
+        .btn-accion:hover { opacity: 0.82; }
+        .btn-editar { background: #1a1a2e; color: #fff; }
+        .btn-compras { background: #0d6efd; color: #fff; }
+        .btn-eliminar { background: #dc3545; color: #fff; }
+
+        .empty-row td {
+            text-align: center;
+            color: #aaa;
+            padding: 40px;
+        }
+
+        /* Modal */
+        .modal-error {
+            display: none;
+            background: #fff3f3;
+            border: 1px solid #f5c6cb;
+            color: #842029;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #444;
+        }
+        .form-control {
+            border-radius: 7px;
+            border: 1.5px solid #ddd;
+            font-size: 0.9rem;
+        }
+        .form-control:focus {
+            border-color: #1a1a2e;
+            box-shadow: none;
+        }
+
+        /* Historial */
+        .venta-card {
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .venta-header {
+            background: #f8f9fa;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .venta-id { font-weight: 700; color: #1a1a2e; font-size: 0.9rem; }
+        .venta-fecha { color: #666; font-size: 0.82rem; }
+        .venta-total { font-weight: 700; color: #198754; font-size: 0.95rem; }
+        .venta-metodo {
+            background: #e8f4fd;
+            color: #1a5276;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .venta-items { padding: 10px 14px; }
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.83rem;
+            padding: 3px 0;
+            border-bottom: 1px solid #f5f5f5;
+            color: #444;
+        }
+        .item-row:last-child { border-bottom: none; }
+        .item-nombre { flex: 1; }
+        .item-detalle { color: #888; white-space: nowrap; margin-left: 12px; }
+        .sin-compras { text-align: center; color: #aaa; padding: 24px 0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div style="display:flex; align-items:center;">
+        <span class="brand">ROSS MILLE</span>
+        <span class="section-name">/ Clientes</span>
+    </div>
+    <div class="topbar-right">
+        <span id="userInfo" style="opacity:0.75;"></span>
+        <button class="btn-top" onclick="window.location.href='/dashboard.html'">Volver</button>
+        <button class="btn-top" onclick="logout()">Cerrar Sesion</button>
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="toolbar">
+        <div class="search-wrap">
+            <input type="text" id="inputBuscar" class="search-input"
+                placeholder="Buscar por ID, nombre, correo o telefono...">
+            <button class="btn-buscar" id="btnBuscar">Buscar</button>
+            <button class="btn-limpiar" id="btnLimpiar">Limpiar</button>
+        </div>
+        <button class="btn-nuevo" id="btnNuevo">+ Nuevo Cliente</button>
+    </div>
+
+    <div class="table-wrap">
+        <div style="overflow-x:auto;">
+            <table id="tablaClientes">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Telefono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyClientes">
+                    <tr class="empty-row"><td colspan="5">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Modal: Crear / Editar Cliente -->
+<div class="modal fade" id="modalCliente" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalClienteTitulo">Nuevo Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCliente" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label" for="fId">ID del Cliente *</label>
+                        <input type="text" class="form-control" id="fId" maxlength="10"
+                            placeholder="Max 10 caracteres">
+                        <div class="form-text" id="fIdHelp">Solo para creacion. No se puede modificar.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="fNombre">Nombre *</label>
+                        <input type="text" class="form-control" id="fNombre" maxlength="100">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="fCorreo">Correo</label>
+                        <input type="email" class="form-control" id="fCorreo" maxlength="100">
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label" for="fTelefono">Telefono</label>
+                            <input type="text" class="form-control" id="fTelefono" maxlength="15">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="fDireccion">Direccion</label>
+                            <input type="text" class="form-control" id="fDireccion" maxlength="255">
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-error" id="modalClienteError"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark" id="btnGuardar">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal: Historial de Compras -->
+<div class="modal fade" id="modalHistorial" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalHistorialTitulo">Historial de Compras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" style="max-height:65vh; overflow-y:auto;">
+                <div id="historialContenido">
+                    <div class="sin-compras">Cargando...</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal: Confirmar Eliminacion -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:0.9rem;">
+                    Confirmar eliminacion de <strong id="eliminarNombre"></strong>.
+                    Esta accion no se puede deshacer.
+                </p>
+                <label class="form-label" for="eliminarContrasena">Tu contrasena</label>
+                <input type="password" class="form-control" id="eliminarContrasena"
+                    placeholder="Ingresa tu contrasena" autocomplete="current-password">
+                <div class="modal-error" id="modalEliminarError"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/clientes.js"></script>
+<script>
+    var session = guardRoute();
+    if (session) {
+        document.getElementById('userInfo').textContent = session.nombre + ' (' + session.rol + ')';
+        init(session);
+    }
+</script>
+
+</body>
+</html>
