@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROSS MILLE - Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .topbar {
+            background-color: #1a1a2e;
+            color: #fff;
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .topbar .brand {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+        }
+        .topbar .section-name {
+            font-size: 0.85rem;
+            opacity: 0.65;
+            margin-left: 12px;
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+        }
+        .btn-top {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.35);
+            color: #fff;
+            border-radius: 6px;
+            padding: 5px 14px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-top:hover {
+            background: rgba(255,255,255,0.12);
+        }
+        .main {
+            padding: 28px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .toolbar .search-wrap {
+            display: flex;
+            gap: 6px;
+            flex: 1;
+            min-width: 220px;
+        }
+        .toolbar input.search-input {
+            flex: 1;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .toolbar input.search-input:focus {
+            border-color: #1a1a2e;
+        }
+        .btn-buscar, .btn-limpiar {
+            background: #1a1a2e;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-limpiar {
+            background: #6c757d;
+        }
+        .btn-buscar:hover { background: #2d2d4e; }
+        .btn-limpiar:hover { background: #5a6268; }
+        .badge-stock-alerta {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #664d03;
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .btn-nuevo {
+            background: #198754;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .btn-nuevo:hover { background: #157347; }
+
+        /* Tarjetas de productos */
+        .producto-card {
+            background: #fff;
+            border-radius: 10px;
+            border: 1.5px solid #e8e8e8;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+            transition: box-shadow 0.15s;
+        }
+        .producto-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.11);
+        }
+        .card-agotado {
+            background: #fff3e0;
+            border-color: #e65100;
+        }
+        .card-stock-bajo {
+            background: #fffde7;
+            border-color: #ffc107;
+        }
+        .card-header-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .tag-cat {
+            background: #e8f0fe;
+            color: #1a1a2e;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tag-talla {
+            background: #f0f0f0;
+            color: #555;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+        .card-nombre {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            line-height: 1.3;
+        }
+        .card-desc {
+            font-size: 0.8rem;
+            color: #888;
+            margin: 0;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .card-meta {
+            font-size: 0.78rem;
+            color: #777;
+        }
+        .card-stock-row {
+            font-size: 0.83rem;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .stock-num {
+            font-weight: 600;
+        }
+        .badge-agotado {
+            background: #e65100;
+            color: #fff;
+            font-size: 0.68rem;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .badge-stock-bajo {
+            background: #ffc107;
+            color: #333;
+            font-size: 0.68rem;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        .card-precio {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 4px;
+        }
+        .card-acciones {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .btn-card-editar {
+            flex: 1;
+            background: #1a1a2e;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 0;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+        .btn-card-editar:hover { background: #2d2d4e; }
+        .btn-card-eliminar {
+            flex: 1;
+            background: #fff;
+            color: #dc3545;
+            border: 1.5px solid #dc3545;
+            border-radius: 6px;
+            padding: 6px 0;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+        .btn-card-eliminar:hover {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        /* Modal */
+        .modal-error {
+            display: none;
+            background: #fff3f3;
+            border: 1px solid #f5c6cb;
+            color: #842029;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #444;
+        }
+        .form-control, .form-select {
+            border-radius: 7px;
+            border: 1.5px solid #ddd;
+            font-size: 0.9rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #1a1a2e;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div style="display:flex; align-items:center;">
+        <span class="brand">ROSS MILLE</span>
+        <span class="section-name">/ Productos</span>
+    </div>
+    <div class="topbar-right">
+        <span id="userInfo" style="opacity:0.75;"></span>
+        <button class="btn-top" onclick="window.location.href='/dashboard.html'">Volver</button>
+        <button class="btn-top" onclick="logout()">Cerrar Sesion</button>
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="toolbar">
+        <div class="search-wrap">
+            <input type="text" id="inputBuscar" class="search-input" placeholder="Buscar por nombre, categoria, color...">
+            <button class="btn-buscar" id="btnBuscar">Buscar</button>
+            <button class="btn-limpiar" id="btnLimpiar">Limpiar</button>
+        </div>
+        <span id="labelStockBajo"></span>
+        <button class="btn-nuevo" id="btnNuevo">+ Nuevo Producto</button>
+    </div>
+
+    <div class="row g-3" id="productosGrid">
+        <div class="col-12 text-center text-muted py-5">Cargando...</div>
+    </div>
+
+</div>
+
+
+<!-- Modal: Crear / Editar Producto -->
+<div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalProductoTitulo">Nuevo Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formProducto" novalidate>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label" for="fNombre">Nombre *</label>
+                            <input type="text" class="form-control" id="fNombre" maxlength="100">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="fDescripcion">Descripcion</label>
+                            <textarea class="form-control" id="fDescripcion" rows="2" maxlength="500"></textarea>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="fTalla">Talla</label>
+                            <input type="text" class="form-control" id="fTalla" maxlength="10" placeholder="S, M, L...">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="fPrecio">Precio *</label>
+                            <input type="number" class="form-control" id="fPrecio" min="0.01" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="fStock">Stock *</label>
+                            <input type="number" class="form-control" id="fStock" min="0" step="1" value="0">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label" for="fGenero">Genero</label>
+                            <select class="form-select" id="fGenero">
+                                <option value="">-- Sin especificar --</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Unisex">Unisex</option>
+                                <option value="Nino">Nino</option>
+                                <option value="Nina">Nina</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="fCategoria">Categoria</label>
+                            <input type="text" class="form-control" id="fCategoria" maxlength="50" placeholder="Camisas, Pantalones...">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="fColor">Color</label>
+                            <input type="text" class="form-control" id="fColor" maxlength="30" placeholder="Negro, Azul...">
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-error" id="modalProductoError"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark" id="btnGuardar">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal: Confirmar Eliminacion -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3" style="font-size:0.9rem;">
+                    Confirmar eliminacion de <strong id="eliminarNombre"></strong>.
+                    Esta accion no se puede deshacer.
+                </p>
+                <label class="form-label" for="eliminarContrasena">Tu contrasena</label>
+                <input type="password" class="form-control" id="eliminarContrasena"
+                    placeholder="Ingresa tu contrasena" autocomplete="current-password">
+                <div class="modal-error" id="modalEliminarError"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/productos.js"></script>
+<script>
+    var session = guardRoute();
+    if (session) {
+        document.getElementById('userInfo').textContent = session.nombre + ' (' + session.rol + ')';
+        init();
+    }
+</script>
+
+</body>
+</html>
