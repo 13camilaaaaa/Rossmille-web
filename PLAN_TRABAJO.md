@@ -12,7 +12,7 @@ La BD MySQL 8.0 en Docker se reutiliza sin cambios de schema.
 | Fase 1 | Base del proyecto + Autenticacion JWT | COMPLETADA | 2026-06-12 |
 | Fase 2 | Modulo Productos | COMPLETADA | 2026-06-15 |
 | Fase 3 | Modulo Clientes | COMPLETADA | 2026-06-15 |
-| Fase 4 | Modulo Vender (POS) | EN PROGRESO | 2026-06-15 |
+| Fase 4 | Modulo Vender (POS) | COMPLETADA | 2026-06-15 |
 | Fase 5 | Modulo Pedidos | Pendiente | — |
 | Fase 6 | Usuarios + Reportes + Dashboard final | Pendiente | — |
 | Fase 7 | Calidad y cierre | Pendiente | — |
@@ -75,23 +75,23 @@ La BD MySQL 8.0 en Docker se reutiliza sin cambios de schema.
 
 ---
 
-## FASE 3 — Modulo Clientes [Pendiente]
+## FASE 3 — Modulo Clientes [COMPLETADA 2026-06-15]
 
 **Criterio de exito:** CRUD de clientes funciona y se puede ver el historial de compras en modal.
 
 ### Tareas
 
-- [ ] 3.1 Entidad `Cliente` + `ClienteRepository`
-- [ ] 3.2 `ClienteDTO` + `HistorialComprasDTO`
-- [ ] 3.3 `ClienteService` — CRUD + historial de compras (JOIN ventas + detalle_venta + productos)
-- [ ] 3.4 `ClienteController` — endpoints:
+- [x] 3.1 Entidad `Cliente` + `ClienteRepository`
+- [x] 3.2 `ClienteDTO` + `HistorialComprasDTO`
+- [x] 3.3 `ClienteService` — CRUD + historial de compras (JOIN ventas + detalle_venta + productos)
+- [x] 3.4 `ClienteController` — endpoints:
   - GET /api/clientes
   - GET /api/clientes/{id}
   - POST /api/clientes
   - PUT /api/clientes/{id}
   - DELETE /api/clientes/{id} — solo Administrador + { contrasena }
   - GET /api/clientes/{id}/compras
-- [ ] 3.5 `clientes.html` + `clientes.js`
+- [x] 3.5 `clientes.html` + `clientes.js`
 
 ### Notas de implementacion
 - El historial de compras se obtiene con JOIN: ventas + detalle_venta + productos WHERE id_cliente = ?
@@ -100,7 +100,7 @@ La BD MySQL 8.0 en Docker se reutiliza sin cambios de schema.
 
 ---
 
-## FASE 4 — Modulo Vender (POS) [EN PROGRESO]
+## FASE 4 — Modulo Vender (POS) [COMPLETADA 2026-06-15]
 
 **Criterio de exito:** Venta completa procesada, stock descontado en BD, ticket mostrado.
 
@@ -112,7 +112,7 @@ Esta es la pieza tecnica mas importante del portafolio (transaccion ACID con blo
 - [x] 4.2 `VentaRequest` + `VentaResponse` + `ItemVentaRequest` + `ItemVentaResponse`
 - [x] 4.2b `VentaRepository` + `DetalleVentaRepository`
 - [x] 4.2c `StockInsuficienteException`
-- [ ] 4.3 `VentaService` con `@Transactional`:
+- [x] 4.3 `VentaService` con `@Transactional`:
   - Recibe: lista de items ({ productoId, cantidad, precioUnitario }), idCliente, descuento, metodoPago
   - Para cada producto: SELECT stock FROM productos WHERE id = ? FOR UPDATE (bloqueo pesimista)
   - Valida stock suficiente — si no alcanza: rollback automatico + StockInsuficienteException
@@ -120,16 +120,16 @@ Esta es la pieza tecnica mas importante del portafolio (transaccion ACID con blo
   - INSERT INTO detalle_venta (batch)
   - UPDATE productos SET stock = stock - cantidad (batch)
   - COMMIT automatico al salir del metodo @Transactional
-- [ ] 4.4 `VentaController` — POST /api/ventas
-- [ ] 4.5 `StockInsuficienteException` — lanzada con mensaje del producto faltante
-- [ ] 4.6 `vender.html` — interfaz POS:
+- [x] 4.4 `VentaController` — POST /api/ventas
+- [x] 4.5 `GlobalExceptionHandler` — handler para StockInsuficienteException (HTTP 409)
+- [x] 4.6 `vender.html` — interfaz POS:
   - Buscador de productos (por nombre)
   - Carrito con cantidad, precio unitario, subtotal
   - Campo de descuento
   - Selector de metodo de pago (Efectivo / Tarjeta / Transferencia)
   - Buscador opcional de cliente
   - Boton Finalizar Venta
-- [ ] 4.7 `vender.js` — carrito en memoria, llamada a la API, ticket en modal
+- [x] 4.7 `vender.js` — carrito en memoria, llamada a la API, ticket en modal
 
 ### Notas de implementacion
 - El SELECT FOR UPDATE requiere que la transaccion sea isolation level READ_COMMITTED o mayor (MySQL por defecto: REPEATABLE_READ — compatible)

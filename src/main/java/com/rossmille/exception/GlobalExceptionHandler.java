@@ -30,6 +30,13 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(StockInsuficienteException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStockInsuficiente(
+            StockInsuficienteException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiResponse<Void>> handleDataIntegrity(
             DataIntegrityViolationException ex) {
