@@ -59,9 +59,11 @@ public class ReporteService {
             ReporteFilaDTO dto = new ReporteFilaDTO();
             dto.setVentaId(((Number) row.get("id")).intValue());
 
-            Timestamp ts = (Timestamp) row.get("fecha");
-            if (ts != null) {
+            Object fechaObj = row.get("fecha");
+            if (fechaObj instanceof Timestamp ts) {
                 dto.setFecha(ts.toLocalDateTime().format(FECHA_FMT));
+            } else if (fechaObj instanceof LocalDateTime ldt) {
+                dto.setFecha(ldt.format(FECHA_FMT));
             }
 
             dto.setIdCliente((String) row.get("id_cliente"));

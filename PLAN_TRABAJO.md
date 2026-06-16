@@ -15,7 +15,7 @@ La BD MySQL 8.0 en Docker se reutiliza sin cambios de schema.
 | Fase 4 | Modulo Vender (POS) | COMPLETADA | 2026-06-15 |
 | Fase 5 | Modulo Pedidos | COMPLETADA | 2026-06-15 |
 | Fase 6 | Usuarios + Reportes + Dashboard final | COMPLETADA | 2026-06-15 |
-| Fase 7 | Calidad y cierre | Pendiente | — |
+| Fase 7 | Calidad y cierre | COMPLETADA | 2026-06-16 |
 
 ---
 
@@ -184,20 +184,26 @@ Esta es la pieza tecnica mas importante del portafolio (transaccion ACID con blo
 
 ---
 
-## FASE 7 — Calidad y cierre [Pendiente]
+## FASE 7 — Calidad y cierre [COMPLETADA 2026-06-16]
 
 **Criterio de exito:** Flujo completo sin errores. Empleado no ve lo que no debe ver.
 
 ### Tareas
 
-- [ ] 7.1 Route guard en `auth.js` — redirige a login si JWT expirado o ausente (ya implementado en guardRoute())
-- [ ] 7.2 Ocultar elementos de admin en frontend segun rol del JWT (ya implementado en dashboard)
-- [ ] 7.3 Loading states y mensajes de error visibles en todas las pantallas
-- [ ] 7.4 Respuestas de error consistentes del GlobalExceptionHandler (ya implementado en Fase 1)
-- [ ] 7.5 Agregar `@PreAuthorize("hasRole('ADMINISTRADOR')")` en controllers de Usuarios y Reporte
-- [ ] 7.6 Prueba de flujo completo: login -> venta -> stock descontado -> reporte PDF
-- [ ] 7.7 Prueba de control de acceso: empleado no puede acceder a /usuarios ni /reporte
-- [ ] 7.8 README.md del proyecto rossmille-web con instrucciones de setup
+- [x] 7.1 Route guard en `auth.js` — redirige a login si JWT expirado o ausente (guardRoute() + apiFetch() con redireccion en 401/403)
+- [x] 7.2 Ocultar elementos de admin en frontend segun rol del JWT (dashboard oculta cards admin-only; usuarios.html y reporte.html redirigen a dashboard)
+- [x] 7.3 Loading states y mensajes de error visibles en todas las pantallas
+- [x] 7.4 Respuestas de error consistentes del GlobalExceptionHandler — agregado handler para AccessDeniedException (403), logging de errores inesperados
+- [x] 7.5 `@PreAuthorize("hasRole('ADMINISTRADOR')")` en UsuarioController y ReporteController a nivel de clase
+- [x] 7.6 Prueba de flujo completo: login -> crear producto -> venta (2 items, descuento, metodo pago) -> stock descontado -> reporte JSON -> descarga PDF — PASS
+- [x] 7.7 Prueba de control de acceso: empleado obtiene HTTP 403 en /api/usuarios y /api/reporte; HTTP 200 en /api/productos y /api/clientes — PASS
+- [x] 7.8 README.md del proyecto rossmille-web creado con instrucciones completas de setup, API y estructura
+
+### Bugs corregidos durante las pruebas
+
+- `ReporteService`: cast `(Timestamp) row.get("fecha")` fallaba porque MySQL Connector 8 retorna LocalDateTime para columnas DATETIME — corregido con instanceof pattern matching
+- `ClienteService`: mismo cast incorrecto en el historial de compras — corregido igual
+- `GlobalExceptionHandler`: `@ExceptionHandler(Exception.class)` atrapaba AccessDeniedException antes de que Spring Security la convirtiera en 403 — agregado handler especifico para AccessDeniedException que retorna HTTP 403 con ApiResponse
 
 ---
 

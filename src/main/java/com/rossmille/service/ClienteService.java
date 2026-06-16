@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -124,9 +125,11 @@ public class ClienteService {
                 dto.setMetodoPago((String) row.get("metodo_pago"));
                 dto.setItems(new ArrayList<>());
 
-                Timestamp ts = (Timestamp) row.get("fecha");
-                if (ts != null) {
+                Object fechaObj = row.get("fecha");
+                if (fechaObj instanceof Timestamp ts) {
                     dto.setFecha(ts.toLocalDateTime().format(FECHA_FMT));
+                } else if (fechaObj instanceof LocalDateTime ldt) {
+                    dto.setFecha(ldt.format(FECHA_FMT));
                 }
                 ventasMap.put(ventaId, dto);
             }
